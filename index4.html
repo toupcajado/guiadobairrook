@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia do Bairro - O comércio local ao seu alcance</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Custom scrollbar for smooth horizontal category sliding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .modal-animate-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-800">
+
+    <!-- HEADER FIXO -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0v4m0 0h-4m4 0V21"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-slate-900 tracking-tight leading-none flex items-center gap-2">
+                        Guia do Bairro
+                        <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] uppercase font-bold bg-emerald-100 text-emerald-800 rounded-full">Oficial</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">O comércio local ao seu alcance</p>
+                </div>
+            </div>
+
+            <!-- Location Badge & Action Button -->
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-200">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>📍 Bairro Centro</span>
+                </div>
+
+                <button onclick="openRegisterModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm rounded-xl transition-all shadow-sm shadow-emerald-600/30 active:scale-95 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span>Cadastrar Empresa</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- HERO & SEARCH SECTION -->
+        <section class="relative rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white p-6 sm:p-8 overflow-hidden shadow-xl">
+            <!-- Background Decorative Blur -->
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-2xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold backdrop-blur-sm mb-3">
+                    ✨ Conectando vizinhos e pequenos negócios
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                    Encontre produtos e serviços pertinho de você
+                </h2>
+                <p class="text-slate-300 text-xs sm:text-sm mb-6">
+                    Apoie os comerciantes da sua região. Peça pelo WhatsApp ou visite a loja hoje mesmo!
+                </p>
+
+                <!-- BARRA DE BUSCA UNIFICADA -->
+                <div class="relative flex items-center">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="O que você procura? Ex: Pão francês, Troca de óleo, Farmácia, Cabelo..." 
+                        class="w-full pl-11 pr-24 py-3.5 sm:py-4 bg-white text-slate-900 placeholder-slate-400 rounded-2xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-emerald-500/40 shadow-lg border-0">
+                    <button onclick="clearSearch()" id="clearSearchBtn" class="hidden absolute right-3 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition-colors">
+                        Limpar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES & FILTERS SECTION -->
+        <section class="space-y-4">
+            <!-- Categorias Carrossel -->
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Categorias</h3>
+                <span class="text-xs text-slate-400" id="totalStoresBadge">0 estabelecimentos</span>
+            </div>
+
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="categoryContainer">
+                <!-- Javascript will populate interactive category pills here -->
+            </div>
+
+            <!-- FILTROS AVANÇADOS (RAIO E ABERTO AGORA) -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/60">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-600">Distância máxima:</span>
+                    <div class="flex bg-slate-200/70 p-1 rounded-xl text-xs font-semibold" id="distanceFilterContainer">
+                        <button onclick="setDistanceFilter('all')" data-dist="all" class="dist-btn px-3 py-1 rounded-lg bg-white text-slate-900 shadow-xs">Todos</button>
+                        <button onclick="setDistanceFilter('0.5')" data-dist="0.5" class="dist-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">500m</button>
+                        <button onclick="setDistanceFilter('1')" data-dist="1" class="dist-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">1 km</button>
+                        <button onclick="setDistanceFilter('3')" data-dist="3" class="dist-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">3 km</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <label class="relative inline-flex items-center cursor-pointer select-none">
+                        <input type="checkbox" id="openNowToggle" onchange="toggleOpenNow()" class="sr-only peer">
+                        <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                        <span class="ml-2.5 text-xs font-semibold text-slate-700 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Aberto Agora
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW TABS SWITCH -->
+        <div class="flex items-center gap-4 border-b border-slate-200">
+            <button onclick="switchTab('stores')" id="tabStores" class="pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0v4m0 0h-4m4 0V21"/></svg>
+                Comércios Locais
+            </button>
+            <button onclick="switchTab('products')" id="tabProducts" class="pb-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                Vitrine do Bairro (Produtos)
+            </button>
+        </div>
+
+        <!-- STORES GRID CONTAINER -->
+        <section id="storesSection" class="space-y-4">
+            <div id="storesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Javascript dynamic store cards inserted here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="storesEmptyState" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 shadow-xs">
+                <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-1">Nenhum comércio encontrado</h3>
+                <p class="text-xs text-slate-500 max-w-md mx-auto mb-4">Não encontramos nenhuma empresa que corresponda aos filtros e termos pesquisados.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">
+                    Resetar Filtros
+                </button>
+            </div>
+        </section>
+
+        <!-- PRODUCTS SHOWCASE CONTAINER -->
+        <section id="productsSection" class="hidden space-y-4">
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Javascript dynamic product cards inserted here -->
+            </div>
+
+            <!-- Empty State for Products -->
+            <div id="productsEmptyState" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 shadow-xs">
+                <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-1">Nenhum produto cadastrado na vitrine</h3>
+                <p class="text-xs text-slate-500 max-w-md mx-auto">Cadastre sua empresa e adicione produtos para vê-los em destaque aqui!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-slate-200 bg-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <p>© 2026 Guia do Bairro — O comércio local ao seu alcance.</p>
+            <div class="flex items-center gap-4 font-semibold">
+                <a href="#" onclick="openRegisterModal(); return false;" class="hover:text-emerald-600 transition-colors">Seja um Parceiro</a>
+                <span>•</span>
+                <span class="text-slate-400">Desenvolvido para fortalecer o comércio local</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE DETALHES DO COMÉRCIO -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden modal-animate-in max-h-[90vh] flex flex-col">
+            <!-- Modal Header / Cover Image -->
+            <div class="relative h-48 sm:h-56 bg-slate-800 flex-shrink-0">
+                <img id="modalCover" src="" alt="Capa" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                <!-- Close Button -->
+                <button onclick="closeModal('detailModal')" class="absolute top-4 right-4 w-9 h-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <!-- Store Info Overlay -->
+                <div class="absolute bottom-4 left-4 right-4 text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="modalCategory" class="px-2.5 py-0.5 bg-emerald-500 text-white font-bold text-[10px] rounded-full uppercase tracking-wider"></span>
+                        <span id="modalStatus" class="px-2.5 py-0.5 bg-white/20 backdrop-blur-md text-white font-bold text-[10px] rounded-full"></span>
+                    </div>
+                    <h2 id="modalName" class="text-xl sm:text-2xl font-extrabold tracking-tight"></h2>
+                    <p id="modalAddress" class="text-xs text-slate-200 flex items-center gap-1 mt-1">
+                        <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                        <span></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Body Scrollable -->
+            <div class="p-5 sm:p-6 space-y-6 overflow-y-auto flex-grow">
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <a id="modalWhatsappLink" href="#" target="_blank" class="py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-600/20">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                        Falar no WhatsApp
+                    </a>
+                    <a id="modalMapsLink" href="#" target="_blank" class="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-colors">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        Ver no Google Maps
+                    </a>
+                </div>
+
+                <!-- Bio / Horários -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="sm:col-span-2">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Sobre o Negócio</h4>
+                        <p id="modalDescription" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border-t sm:border-t-0 sm:border-l border-slate-200 pt-3 sm:pt-0 sm:pl-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Horário</h4>
+                        <p id="modalHours" class="text-xs font-semibold text-slate-800"></p>
+                        <span id="modalDistance" class="inline-block mt-2 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md"></span>
+                    </div>
+                </div>
+
+                <!-- Store Products Catalogue -->
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900 mb-3 flex items-center gap-2">
+                        <span>Produtos & Destaques</span>
+                        <span id="modalProductCount" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full"></span>
+                    </h3>
+                    <div id="modalProductsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Javascript dynamic products -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO DE EMPRESA -->
+    <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden modal-animate-in max-h-[92vh] flex flex-col">
+            <!-- Header -->
+            <div class="p-5 bg-gradient-to-r from-emerald-700 to-teal-800 text-white flex items-center justify-between shrink-0">
+                <div>
+                    <h2 class="text-lg font-extrabold">Cadastre sua Empresa</h2>
+                    <p class="text-xs text-emerald-100">Exiba seu negócio gratuitamente no Guia do Bairro</p>
+                </div>
+                <button onclick="closeModal('registerModal')" class="w-8 h-8 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-colors cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Estabelecimento *</label>
+                        <input type="text" required id="regName" placeholder="Ex: Padaria Pão Quente" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Categoria *</label>
+                        <select id="regCategory" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                            <option value="Padarias">Padarias</option>
+                            <option value="Mercados">Mercados</option>
+                            <option value="Serviços">Serviços</option>
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Beleza">Beleza</option>
+                            <option value="Oficinas">Oficinas</option>
+                            <option value="Farmácias">Farmácias</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp (apenas números) *</label>
+                        <input type="tel" required id="regPhone" placeholder="Ex: 5511999999999" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Distância Aproximada (km) *</label>
+                        <input type="number" step="0.1" required id="regDistance" placeholder="Ex: 0.5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Endereço Completo *</label>
+                    <input type="text" required id="regAddress" placeholder="Ex: Rua das Flores, 123 - Centro" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Horário de Funcionamento *</label>
+                        <input type="text" required id="regHours" placeholder="Ex: Seg a Sáb: 07h às 19h" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">URL da Foto de Capa (Unsplash/Imgur)</label>
+                        <input type="url" id="regImage" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Descrição Breve *</label>
+                    <textarea required id="regDescription" rows="2" placeholder="Conte um pouco sobre os seus diferenciais e especialidades..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none resize-none"></textarea>
+                </div>
+
+                <!-- Cadastrar Produto Inicial -->
+                <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100 space-y-3">
+                    <h4 class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Adicionar 1º Produto em Destaque (Opcional)
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="regProdName" placeholder="Nome do Produto (Ex: Pão na chapa)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none">
+                        <input type="text" id="regProdPrice" placeholder="Preço (Ex: R$ 8,50)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('registerModal')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/30 transition-all active:scale-95">
+                        Salvar e Publicar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        // APP STATE & STORAGE KEY
+        const STORAGE_KEY = 'guia_do_bairro_stores_v1';
+        
+        const CATEGORIES = [
+            'Todos', 'Padarias', 'Mercados', 'Serviços', 'Alimentação', 'Beleza', 'Oficinas', 'Farmácias'
+        ];
+
+        // INITIAL MOCK DATA (CARREGADO CASO O LOCALSTORAGE ESTEJA VAZIO)
+        const MOCK_STORES = [
+            {
+                id: 'store-1',
+                name: 'Padaria Pão de Mel',
+                category: 'Padarias',
+                address: 'Rua das Flores, 142 - Centro',
+                distance: 0.35,
+                rating: 4.9,
+                reviewsCount: 128,
+                isOpen: true,
+                phone: '5511999991111',
+                hours: 'Seg a Sáb: 06:00 - 20:00',
+                image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+                description: 'A padaria mais tradicional do bairro! Pão francês quentinho a toda hora, cafés especiais, bolos caseiros e salgados artesanais feitos diariamente com carinho.',
+                products: [
+                    { id: 'p1', name: 'Pão na Chapa com Requeijão', price: 'R$ 8,50', image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p2', name: 'Café Expresso Média', price: 'R$ 6,00', image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p3', name: 'Bolo de Cenoura com Chocolate (kg)', price: 'R$ 35,00', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80' }
+                ]
+            },
+            {
+                id: 'store-2',
+                name: 'Farmácia Santo Antônio',
+                category: 'Farmácias',
+                address: 'Av. Principal, 890 - Centro',
+                distance: 0.6,
+                rating: 4.8,
+                reviewsCount: 95,
+                isOpen: true,
+                phone: '5511999992222',
+                hours: 'Atendimento 24 Horas',
+                image: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=800&q=80',
+                description: 'Atendimento humanizado, medicamentos com os melhores descontos da região, linha completa de higiene e entrega rápida em todo o bairro.',
+                products: [
+                    { id: 'p4', name: 'Protetor Solar Facial FPS 60', price: 'R$ 49,90', image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p5', name: 'Termômetro Digital Infantil', price: 'R$ 29,90', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80' }
+                ]
+            },
+            {
+                id: 'store-3',
+                name: 'Oficina Auto Center Silva',
+                category: 'Oficinas',
+                address: 'Rua Silva Jardim, 45 - Centro',
+                distance: 1.2,
+                rating: 4.7,
+                reviewsCount: 64,
+                isOpen: true,
+                phone: '5511999993333',
+                hours: 'Seg a Sex: 08:00 - 18:00',
+                image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80',
+                description: 'Serviços mecânicos gerais com garantia e transparência. Troca de óleo rápida, alinhamento, balanceamento 3D e revisão para viagens.',
+                products: [
+                    { id: 'p6', name: 'Troca de Óleo Sintético + Filtro', price: 'R$ 180,00', image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p7', name: 'Alinhamento 3D + Balanceamento', price: 'R$ 120,00', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=400&q=80' }
+                ]
+            },
+            {
+                id: 'store-4',
+                name: 'Barbearia Estilo Urbano',
+                category: 'Beleza',
+                address: 'Praça Matriz, 21 - Centro',
+                distance: 0.45,
+                rating: 5.0,
+                reviewsCount: 210,
+                isOpen: true,
+                phone: '5511999994444',
+                hours: 'Ter a Sáb: 09:00 - 20:00',
+                image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80',
+                description: 'Corte de cabelo moderno, barba na toalha quente, ambiente climatizado com sinuca, música boa e bebida gelada por conta da casa.',
+                products: [
+                    { id: 'p8', name: 'Combo Cabelo + Barba + Bebida', price: 'R$ 75,00', image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p9', name: 'Pomada Modeladora Efeito Matte', price: 'R$ 38,00', image: 'https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&w=400&q=80' }
+                ]
+            },
+            {
+                id: 'store-5',
+                name: 'Hortifruti Sacolão da Vila',
+                category: 'Mercados',
+                address: 'Rua São José, 310 - Centro',
+                distance: 0.8,
+                rating: 4.8,
+                reviewsCount: 142,
+                isOpen: false,
+                phone: '5511999995555',
+                hours: 'Seg a Sáb: 07:00 - 19:30',
+                image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=800&q=80',
+                description: 'Frutas, legumes e verduras selecionados diariamente direto do produtor. Orgânicos frescos e cestas de feira entregues na sua casa.',
+                products: [
+                    { id: 'p10', name: 'Cesta Orgânica da Semana', price: 'R$ 65,00', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'p11', name: 'Morangos Selecionados (250g)', price: 'R$ 8,90', image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=400&q=80' }
+                ]
+            }
+        ];
+
+        // Active Application State
+        let stores = [];
+        let currentCategory = 'Todos';
+        let currentSearchQuery = '';
+        let maxDistance = 'all'; // 'all', '0.5', '1', '3'
+        let onlyOpenNow = false;
+        let activeTab = 'stores'; // 'stores' or 'products'
+
+        // Load data from LocalStorage or populate default
+        function initData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    stores = JSON.parse(stored);
+                } else {
+                    stores = MOCK_STORES;
+                    saveStoresToStorage();
+                }
+            } catch (e) {
+                console.warn('Erro ao acessar LocalStorage, utilizando dados de memória:', e);
+                stores = MOCK_STORES;
+            }
+        }
+
+        function saveStoresToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(stores));
+            } catch (e) {
+                console.error('Falha ao salvar dados no LocalStorage:', e);
+            }
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = CATEGORIES.map(cat => {
+                const isSelected = cat === currentCategory;
+                const activeClasses = isSelected 
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20 font-bold scale-[1.02]' 
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/80 font-semibold';
+                
+                return `
+                    <button onclick="selectCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all duration-150 ${activeClasses}">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function getFilteredStores() {
+            return stores.filter(store => {
+                // Category Filter
+                const matchesCategory = (currentCategory === 'Todos') || (store.category === currentCategory);
+                
+                // Search Filter (matches store name, category, description or product names)
+                const query = currentSearchQuery.toLowerCase().trim();
+                let matchesSearch = true;
+                if (query) {
+                    const matchName = store.name.toLowerCase().includes(query);
+                    const matchCat = store.category.toLowerCase().includes(query);
+                    const matchDesc = store.description.toLowerCase().includes(query);
+                    const matchProd = store.products && store.products.some(p => p.name.toLowerCase().includes(query));
+                    matchesSearch = matchName || matchCat || matchDesc || matchProd;
+                }
+
+                // Distance Filter
+                let matchesDistance = true;
+                if (maxDistance !== 'all') {
+                    matchesDistance = store.distance <= parseFloat(maxDistance);
+                }
+
+                // Open Now Filter
+                let matchesOpen = true;
+                if (onlyOpenNow) {
+                    matchesOpen = store.isOpen === true;
+                }
+
+                return matchesCategory && matchesSearch && matchesDistance && matchesOpen;
+            });
+        }
+
+        function renderStoresGrid() {
+            const grid = document.getElementById('storesGrid');
+            const emptyState = document.getElementById('storesEmptyState');
+            const filtered = getFilteredStores();
+
+            document.getElementById('totalStoresBadge').textContent = `${filtered.length} de ${stores.length} lojas`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(store => {
+                const whatsappMsg = encodeURIComponent(`Olá! Vi a ${store.name} no Guia do Bairro e gostaria de mais informações.`);
+                const whatsappUrl = `https://wa.me/${store.phone}?text=${whatsappMsg}`;
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.name + ' ' + store.address)}`;
+
+                return `
+                    <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col group">
+                        <!-- Cover Image with badges -->
+                        <div class="relative h-44 overflow-hidden bg-slate-100">
+                            <img src="${store.image}" alt="${store.name}" onerror="this.src='https://placehold.co/600x400/f1f5f9/475569?text=Guia+do+Bairro'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            
+                            <!-- Badges Top -->
+                            <div class="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                                <span class="px-2.5 py-1 bg-white/90 backdrop-blur-md font-extrabold text-[10px] text-slate-800 rounded-lg uppercase tracking-wider shadow-xs">
+                                    ${store.category}
+                                </span>
+                                <span class="px-2.5 py-1 ${store.isOpen ? 'bg-emerald-500/90 text-white' : 'bg-slate-800/80 text-slate-200'} backdrop-blur-md font-bold text-[10px] rounded-lg flex items-center gap-1 shadow-xs">
+                                    <span class="w-1.5 h-1.5 rounded-full ${store.isOpen ? 'bg-white animate-pulse' : 'bg-slate-400'}"></span>
+                                    ${store.isOpen ? 'Aberto' : 'Fechado'}
+                                </span>
+                            </div>
+
+                            <!-- Rating & Distance Bottom -->
+                            <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-semibold">
+                                <div class="flex items-center gap-1 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-md">
+                                    <svg class="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    <span>${store.rating}</span>
+                                    <span class="text-slate-300 text-[10px]">(${store.reviewsCount})</span>
+                                </div>
+                                <span class="bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-md text-[11px] text-slate-200">
+                                    📍 ${store.distance < 1 ? (store.distance * 1000) + 'm' : store.distance + 'km'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-4 flex-grow flex flex-col justify-between space-y-3">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base group-hover:text-emerald-700 transition-colors line-clamp-1">${store.name}</h3>
+                                <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1 line-clamp-1">
+                                    <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                                    ${store.address}
+                                </p>
+                                <p class="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">${store.description}</p>
+                            </div>
+
+                            <!-- Card Footer Actions -->
+                            <div class="pt-2 border-t border-slate-100 grid grid-cols-3 gap-1.5">
+                                <a href="${whatsappUrl}" target="_blank" class="py-2 px-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[11px] rounded-xl flex items-center justify-center gap-1 transition-colors">
+                                    <svg class="w-3.5 h-3.5 fill-emerald-600" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    Whats
+                                </a>
+                                <a href="${mapsUrl}" target="_blank" class="py-2 px-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] rounded-xl flex items-center justify-center gap-1 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                                    Rotas
+                                </a>
+                                <button onclick="openDetailModal('${store.id}')" class="py-2 px-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[11px] rounded-xl transition-colors cursor-pointer">
+                                    Perfil
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderProductsGrid() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('productsEmptyState');
+            const filteredStores = getFilteredStores();
+
+            // Extract all products from matching stores
+            let allProducts = [];
+            filteredStores.forEach(store => {
+                if (store.products && store.products.length > 0) {
+                    store.products.forEach(prod => {
+                        allProducts.push({
+                            ...prod,
+                            storeName: store.name,
+                            storePhone: store.phone,
+                            storeCategory: store.category,
+                            storeId: store.id
+                        });
+                    });
+                }
+            });
+
+            if (allProducts.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = allProducts.map(prod => {
+                const msg = encodeURIComponent(`Olá! Vi no Guia do Bairro o produto "${prod.name}" (${prod.price}) e gostaria de encomendar!`);
+                const waUrl = `https://wa.me/${prod.storePhone}?text=${msg}`;
+
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="relative h-36 overflow-hidden bg-slate-100">
+                                <img src="${prod.image}" alt="${prod.name}" onerror="this.src='https://placehold.co/400x300/f1f5f9/475569?text=Produto'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-900/80 backdrop-blur-md text-white font-bold text-[10px] rounded-md">
+                                    ${prod.storeName}
+                                </span>
+                            </div>
+                            <div class="p-3.5">
+                                <h4 class="font-bold text-slate-800 text-sm line-clamp-1">${prod.name}</h4>
+                                <p class="text-base font-extrabold text-emerald-700 mt-1">${prod.price}</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 pt-0">
+                            <a href="${waUrl}" target="_blank" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-xs">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                Pedir no WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('searchInput');
+            currentSearchQuery = input.value;
+            
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (currentSearchQuery.trim().length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderAllViews();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            currentSearchQuery = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderAllViews();
+        }
+
+        function selectCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            renderAllViews();
+        }
+
+        function setDistanceFilter(dist) {
+            maxDistance = dist;
+            document.querySelectorAll('.dist-btn').forEach(btn => {
+                if (btn.getAttribute('data-dist') === dist) {
+                    btn.className = 'dist-btn px-3 py-1 rounded-lg bg-white text-slate-900 shadow-xs font-bold';
+                } else {
+                    btn.className = 'dist-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-semibold';
+                }
+            });
+            renderAllViews();
+        }
+
+        function toggleOpenNow() {
+            onlyOpenNow = document.getElementById('openNowToggle').checked;
+            renderAllViews();
+        }
+
+        function resetFilters() {
+            currentCategory = 'Todos';
+            currentSearchQuery = '';
+            maxDistance = 'all';
+            onlyOpenNow = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('openNowToggle').checked = false;
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            setDistanceFilter('all');
+            renderCategories();
+            renderAllViews();
+            showToast('Filtros redefinidos');
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            const btnStores = document.getElementById('tabStores');
+            const btnProducts = document.getElementById('tabProducts');
+            const secStores = document.getElementById('storesSection');
+            const secProducts = document.getElementById('productsSection');
+
+            if (tab === 'stores') {
+                btnStores.className = 'pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-colors flex items-center gap-2';
+                btnProducts.className = 'pb-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-2';
+                secStores.classList.remove('hidden');
+                secProducts.classList.add('hidden');
+            } else {
+                btnProducts.className = 'pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-colors flex items-center gap-2';
+                btnStores.className = 'pb-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-2';
+                secProducts.classList.remove('hidden');
+                secStores.classList.add('hidden');
+            }
+        }
+
+        function renderAllViews() {
+            renderStoresGrid();
+            renderProductsGrid();
+        }
+
+        function openDetailModal(storeId) {
+            const store = stores.find(s => s.id === storeId);
+            if (!store) return;
+
+            document.getElementById('modalCover').src = store.image;
+            document.getElementById('modalCategory').textContent = store.category;
+            document.getElementById('modalStatus').textContent = store.isOpen ? 'Aberto Agora' : 'Fechado';
+            document.getElementById('modalName').textContent = store.name;
+            document.getElementById('modalAddress').querySelector('span').textContent = store.address;
+            document.getElementById('modalDescription').textContent = store.description;
+            document.getElementById('modalHours').textContent = store.hours;
+            document.getElementById('modalDistance').textContent = `📍 a ${store.distance < 1 ? (store.distance * 1000) + 'm' : store.distance + 'km'} de você`;
+
+            const waMsg = encodeURIComponent(`Olá! Vi o perfil da ${store.name} no Guia do Bairro.`);
+            document.getElementById('modalWhatsappLink').href = `https://wa.me/${store.phone}?text=${waMsg}`;
+            document.getElementById('modalMapsLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.name + ' ' + store.address)}`;
+
+            // Render Store Products
+            const prodsList = document.getElementById('modalProductsList');
+            const prodsCount = document.getElementById('modalProductCount');
+            
+            if (store.products && store.products.length > 0) {
+                prodsCount.textContent = `${store.products.length} itens`;
+                prodsList.innerHTML = store.products.map(p => {
+                    const pMsg = encodeURIComponent(`Olá! Vi no Guia do Bairro o produto "${p.name}" (${p.price}) na sua loja e quero pedir!`);
+                    return `
+                        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/100x100/f1f5f9/475569?text=Item'" class="w-12 h-12 rounded-xl object-cover shrink-0">
+                                <div>
+                                    <h5 class="font-bold text-xs text-slate-800">${p.name}</h5>
+                                    <p class="text-xs font-extrabold text-emerald-700">${p.price}</p>
+                                </div>
+                            </div>
+                            <a href="https://wa.me/${store.phone}?text=${pMsg}" target="_blank" class="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shrink-0 transition-colors">
+                                Pedir
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                prodsCount.textContent = '0 itens';
+                prodsList.innerHTML = `<p class="text-xs text-slate-400 col-span-2">Nenhum produto cadastrado no momento.</p>`;
+            }
+
+            document.getElementById('detailModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function handleRegisterSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('regName').value.trim();
+            const category = document.getElementById('regCategory').value;
+            const phone = document.getElementById('regPhone').value.trim().replace(/\D/g, '');
+            const distance = parseFloat(document.getElementById('regDistance').value) || 0.5;
+            const address = document.getElementById('regAddress').value.trim();
+            const hours = document.getElementById('regHours').value.trim();
+            let image = document.getElementById('regImage').value.trim();
+            const description = document.getElementById('regDescription').value.trim();
+
+            const prodName = document.getElementById('regProdName').value.trim();
+            const prodPrice = document.getElementById('regProdPrice').value.trim();
+
+            if (!image) {
+                image = 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80';
+            }
+
+            const newProducts = [];
+            if (prodName && prodPrice) {
+                newProducts.push({
+                    id: 'p-' + Date.now(),
+                    name: prodName,
+                    price: prodPrice,
+                    image: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=400&q=80'
+                });
+            }
+
+            const newStore = {
+                id: 'store-' + Date.now(),
+                name: name,
+                category: category,
+                address: address,
+                distance: distance,
+                rating: 5.0,
+                reviewsCount: 1,
+                isOpen: true,
+                phone: phone,
+                hours: hours,
+                image: image,
+                description: description,
+                products: newProducts
+            };
+
+            stores.unshift(newStore);
+            saveStoresToStorage();
+            closeModal('registerModal');
+            renderAllViews();
+
+            showToast(`Empresa "${name}" cadastrada com sucesso! 🎉`);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 modal-animate-in border border-slate-800 pointer-events-auto';
+            toast.innerHTML = `
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initData();
+            renderCategories();
+            renderAllViews();
+        });
+    </script>
+</body>
+</html>
